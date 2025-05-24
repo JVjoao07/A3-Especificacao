@@ -8,88 +8,152 @@ import com.nutrifacil.service.CalculadoraMetabolicas;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Aplicacao {
+    private static final Scanner scanner = new Scanner(System.in);
+    private static final CalculadoraMetabolicas calculadoraMetabolicas = new CalculadoraMetabolicas();
+    private static final ServicoNutricional servicoNutricional = new ServicoNutricional();
+
     public static void main(String[] args) {
-        // Criando um usuário de exemplo
-        Usuario usuario = new Usuario(
-            "João Silva",
-            30,
-            75.5, // peso em kg
-            175.0, // altura em cm
-            "M",
-            TipoDieta.MEDITERRANEA,
-            "Manter peso e melhorar saúde"
-        );
-
-        // Adicionando algumas alergias
-        usuario.adicionarAlergia(Alergia.LACTOSE);
-        usuario.adicionarAlergia(Alergia.GLUTEN);
-
-        // Inicializando os serviços
-        CalculadoraMetabolicas calculadoraMetabolicas = new CalculadoraMetabolicas();
-        ServicoNutricional servicoNutricional = new ServicoNutricional();
-
-        // Calculando métricas de saúde
-        double tmb = calculadoraMetabolicas.calcularTMB(usuario);
-        double imc = calculadoraMetabolicas.calcularIMC(usuario);
-        String categoriaIMC = calculadoraMetabolicas.getCategoriaIMC(imc);
-        double consumoAgua = calculadoraMetabolicas.calcularConsumoAgua(usuario);
-
-        // Obtendo recomendações alimentares
-        Map<String, List<String>> recomendacoesDieta = servicoNutricional.getRecomendacoesDieta(usuario);
-
-        // Exibindo resultados
-        System.out.println("=== NutriFácil - Relatório de Saúde ===");
-        System.out.println("\nInformações do Usuário:");
-        System.out.println(usuario);
+        System.out.println("=== Bem-vindo ao NutriFácil ===");
         
-        System.out.println("\nMétricas de Saúde:");
-        System.out.printf("Taxa Metabólica Basal (TMB): %.2f kcal/dia%n", tmb);
-        System.out.printf("Índice de Massa Corporal (IMC): %.2f - %s%n", imc, categoriaIMC);
-        System.out.printf("Consumo Diário de Água Recomendado: %.0f ml%n", consumoAgua);
+        Usuario usuario = coletarInformacoesUsuario();
+        exibirMenu(usuario);
+        
+        scanner.close();
+    }
 
-        System.out.println("\nRecomendações Alimentares:");
+    private static Usuario coletarInformacoesUsuario() {
+        System.out.println("\nPor favor, insira suas informações:");
+        
+        System.out.print("Nome: ");
+        String nome = scanner.nextLine();
+        
+        System.out.print("Idade: ");
+        int idade = Integer.parseInt(scanner.nextLine());
+        
+        System.out.print("Peso (kg): ");
+        double peso = Double.parseDouble(scanner.nextLine());
+        
+        System.out.print("Altura (cm): ");
+        double altura = Double.parseDouble(scanner.nextLine());
+        
+        System.out.print("Sexo (M/F): ");
+        String sexo = scanner.nextLine().toUpperCase();
+        
+        System.out.println("\nTipos de dieta disponíveis:");
+        for (TipoDieta tipo : TipoDieta.values()) {
+            System.out.println("- " + tipo);
+        }
+        System.out.print("Escolha sua dieta: ");
+        TipoDieta tipoDieta = TipoDieta.valueOf(scanner.nextLine().toUpperCase());
+        
+        System.out.print("Objetivo (ex: perder peso, ganhar massa, etc): ");
+        String objetivo = scanner.nextLine();
+        
+        Usuario usuario = new Usuario(nome, idade, peso, altura, sexo, tipoDieta, objetivo);
+        
+        System.out.println("\nAlergias disponíveis:");
+        for (Alergia alergia : Alergia.values()) {
+            System.out.println("- " + alergia);
+        }
+        
+        while (true) {
+            System.out.print("\nDigite uma alergia (ou 'fim' para terminar): ");
+            String alergiaStr = scanner.nextLine();
+            if (alergiaStr.equalsIgnoreCase("fim")) break;
+            
+            try {
+                Alergia alergia = Alergia.valueOf(alergiaStr.toUpperCase());
+                usuario.adicionarAlergia(alergia);
+                System.out.println("Alergia adicionada: " + alergia);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Alergia inválida. Por favor, escolha uma das opções listadas.");
+            }
+        }
+        
+        return usuario;
+    }
+
+    private static void exibirMenu(Usuario usuario) {
+        while (true) {
+            System.out.println("\n=== Menu NutriFácil ===");
+            System.out.println("1. Exibir informações do usuário");
+            System.out.println("2. Calcular Taxa Metabólica Basal (TMB)");
+            System.out.println("3. Calcular Índice de Massa Corporal (IMC)");
+            System.out.println("4. Calcular consumo de água recomendado");
+            System.out.println("5. Obter recomendações alimentares");
+            System.out.println("6. Sair");
+            System.out.print("\nEscolha uma opção: ");
+            
+            int opcao = Integer.parseInt(scanner.nextLine());
+            
+            switch (opcao) {
+                case 1:
+                    exibirInformacoesUsuario(usuario);
+                    break;
+                case 2:
+                    calcularTMB(usuario);
+                    break;
+                case 3:
+                    calcularIMC(usuario);
+                    break;
+                case 4:
+                    calcularConsumoAgua(usuario);
+                    break;
+                case 5:
+                    exibirRecomendacoesAlimentares(usuario);
+                    break;
+                case 6:
+                    System.out.println("\nObrigado por usar o NutriFácil!");
+                    return;
+                default:
+                    System.out.println("\nOpção inválida. Por favor, escolha uma opção de 1 a 6.");
+            }
+        }
+    }
+
+    private static void exibirInformacoesUsuario(Usuario usuario) {
+        System.out.println("\n=== Informações do Usuário ===");
+        System.out.println(usuario);
+        System.out.println("\nAlergias:");
+        for (Alergia alergia : usuario.getAlergias()) {
+            System.out.println("- " + alergia);
+        }
+    }
+
+    private static void calcularTMB(Usuario usuario) {
+        double tmb = calculadoraMetabolicas.calcularTMB(usuario);
+        System.out.printf("\nSua Taxa Metabólica Basal (TMB) é: %.2f kcal/dia%n", tmb);
+    }
+
+    private static void calcularIMC(Usuario usuario) {
+        double imc = calculadoraMetabolicas.calcularIMC(usuario);
+        String categoria = calculadoraMetabolicas.getCategoriaIMC(imc);
+        System.out.printf("\nSeu Índice de Massa Corporal (IMC) é: %.2f%n", imc);
+        System.out.println("Classificação: " + categoria);
+    }
+
+    private static void calcularConsumoAgua(Usuario usuario) {
+        double consumoAgua = calculadoraMetabolicas.calcularConsumoAgua(usuario);
+        System.out.printf("\nSeu consumo diário de água recomendado é: %.0f ml%n", consumoAgua);
+    }
+
+    private static void exibirRecomendacoesAlimentares(Usuario usuario) {
+        Map<String, List<String>> recomendacoes = servicoNutricional.getRecomendacoesDieta(usuario);
+        
+        System.out.println("\n=== Recomendações Alimentares ===");
+        
         System.out.println("\nAlimentos Recomendados:");
-        recomendacoesDieta.get("Alimentos Recomendados").forEach(alimento -> 
-            System.out.println("- " + alimento));
-
+        for (String alimento : recomendacoes.get("Alimentos Recomendados")) {
+            System.out.println("- " + alimento);
+        }
+        
         System.out.println("\nAlimentos a Evitar:");
-        recomendacoesDieta.get("Alimentos a Evitar").forEach(alimento -> 
-            System.out.println("- " + alimento));
-
-        // Exemplo com outro usuário
-        System.out.println("\n=== Exemplo com Outro Usuário ===");
-        Usuario usuario2 = new Usuario(
-            "Maria Santos",
-            28,
-            62.0,
-            165.0,
-            "F",
-            TipoDieta.VEGETARIANA,
-            "Perder peso"
-        );
-        usuario2.adicionarAlergia(Alergia.SOJA);
-
-        System.out.println("\nInformações do Usuário:");
-        System.out.println(usuario2);
-
-        System.out.println("\nMétricas de Saúde:");
-        System.out.printf("Taxa Metabólica Basal (TMB): %.2f kcal/dia%n", 
-            calculadoraMetabolicas.calcularTMB(usuario2));
-        System.out.printf("Índice de Massa Corporal (IMC): %.2f - %s%n", 
-            calculadoraMetabolicas.calcularIMC(usuario2),
-            calculadoraMetabolicas.getCategoriaIMC(calculadoraMetabolicas.calcularIMC(usuario2)));
-        System.out.printf("Consumo Diário de Água Recomendado: %.0f ml%n", 
-            calculadoraMetabolicas.calcularConsumoAgua(usuario2));
-
-        System.out.println("\nRecomendações Alimentares:");
-        Map<String, List<String>> recomendacoes2 = servicoNutricional.getRecomendacoesDieta(usuario2);
-        System.out.println("\nAlimentos Recomendados:");
-        recomendacoes2.get("Alimentos Recomendados").forEach(alimento -> 
-            System.out.println("- " + alimento));
-        System.out.println("\nAlimentos a Evitar:");
-        recomendacoes2.get("Alimentos a Evitar").forEach(alimento -> 
-            System.out.println("- " + alimento));
+        for (String alimento : recomendacoes.get("Alimentos a Evitar")) {
+            System.out.println("- " + alimento);
+        }
     }
 } 
