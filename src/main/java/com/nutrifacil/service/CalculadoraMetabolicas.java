@@ -2,7 +2,7 @@ package com.nutrifacil.service;
 
 import com.nutrifacil.model.Usuario;
 
-public class CalculadoraSaude {
+public class CalculadoraMetabolicas {
     
     public double calcularTMB(Usuario usuario) {
         double tmb;

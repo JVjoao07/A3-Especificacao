@@ -2,7 +2,7 @@ package com.nutrifacil.test;
 
 import com.nutrifacil.model.TipoDieta;
 import com.nutrifacil.model.Usuario;
-import com.nutrifacil.service.CalculadoraSaude;
+import com.nutrifacil.service.CalculadoraMetabolicas;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
@@ -12,13 +12,13 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TesteCalculadoraSaude {
+public class TesteCalculadoraMetabolicas {
     private Usuario usuario;
-    private CalculadoraSaude calculadoraSaude;
+    private CalculadoraMetabolicas calculadoraMetabolicas;
     private double resultado;
 
-    public TesteCalculadoraSaude() {
-        this.calculadoraSaude = new CalculadoraSaude();
+    public TesteCalculadoraMetabolicas() {
+        this.calculadoraMetabolicas = new CalculadoraMetabolicas();
     }
 
     @Dado("que o usuário tem as seguintes informações:")
@@ -55,17 +55,17 @@ public class TesteCalculadoraSaude {
 
     @Quando("o sistema calcula a TMB")
     public void oSistemaCalculaATMB() {
-        resultado = calculadoraSaude.calcularTMB(usuario);
+        resultado = calculadoraMetabolicas.calcularTMB(usuario);
     }
 
     @Quando("o sistema calcula o IMC")
     public void oSistemaCalculaOIMC() {
-        resultado = calculadoraSaude.calcularIMC(usuario);
+        resultado = calculadoraMetabolicas.calcularIMC(usuario);
     }
 
     @Quando("o sistema calcula o consumo de água recomendado")
     public void oSistemaCalculaOConsumoDeAguaRecomendado() {
-        resultado = calculadoraSaude.calcularConsumoAgua(usuario);
+        resultado = calculadoraMetabolicas.calcularConsumoAgua(usuario);
     }
 
     @Então("o resultado deve ser aproximadamente {double} kcal/dia")
@@ -80,7 +80,7 @@ public class TesteCalculadoraSaude {
 
     @Então("a classificação deve ser {string}")
     public void aClassificacaoDeveSer(String classificacao) {
-        assertEquals(classificacao, calculadoraSaude.getCategoriaIMC(resultado));
+        assertEquals(classificacao, calculadoraMetabolicas.getCategoriaIMC(resultado));
     }
 
     @Então("o resultado deve ser {string} ml por dia")

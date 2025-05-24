@@ -3,7 +3,7 @@ package com.nutrifacil.test;
 import com.nutrifacil.model.Alergia;
 import com.nutrifacil.model.TipoDieta;
 import com.nutrifacil.model.Usuario;
-import com.nutrifacil.service.ServicoRecomendacaoAlimentos;
+import com.nutrifacil.service.ServicoNutricional;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Então;
 import io.cucumber.java.pt.Quando;
@@ -13,13 +13,13 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TesteRecomendacaoAlimentos {
+public class TesteServicoNutricional {
     private Usuario usuario;
-    private ServicoRecomendacaoAlimentos servicoAlimentos;
+    private ServicoNutricional servicoNutricional;
     private Map<String, List<String>> recomendacoes;
 
-    public TesteRecomendacaoAlimentos() {
-        this.servicoAlimentos = new ServicoRecomendacaoAlimentos();
+    public TesteServicoNutricional() {
+        this.servicoNutricional = new ServicoNutricional();
         this.usuario = new Usuario(
             "Teste",
             30,
@@ -45,7 +45,7 @@ public class TesteRecomendacaoAlimentos {
 
     @Quando("o sistema gera as recomendações")
     public void oSistemaGeraAsRecomendacoes() {
-        recomendacoes = servicoAlimentos.getRecomendacoesDieta(usuario);
+        recomendacoes = servicoNutricional.getRecomendacoesDieta(usuario);
     }
 
     @Então("a lista deve incluir {string}")

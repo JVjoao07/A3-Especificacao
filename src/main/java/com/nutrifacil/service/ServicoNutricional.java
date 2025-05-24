@@ -6,11 +6,11 @@ import com.nutrifacil.model.Usuario;
 
 import java.util.*;
 
-public class ServicoRecomendacaoAlimentos {
+public class ServicoNutricional {
     private final Map<TipoDieta, List<String>> alimentosPorDieta;
     private final Map<String, Set<Alergia>> alergiasPorAlimento;
 
-    public ServicoRecomendacaoAlimentos() {
+    public ServicoNutricional() {
         this.alimentosPorDieta = inicializarAlimentosPorDieta();
         this.alergiasPorAlimento = inicializarAlergiasPorAlimento();
     }

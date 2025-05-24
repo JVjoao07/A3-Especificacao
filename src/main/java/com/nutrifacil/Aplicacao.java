@@ -3,13 +3,13 @@ package com.nutrifacil;
 import com.nutrifacil.model.Alergia;
 import com.nutrifacil.model.TipoDieta;
 import com.nutrifacil.model.Usuario;
-import com.nutrifacil.service.ServicoRecomendacaoAlimentos;
-import com.nutrifacil.service.CalculadoraSaude;
+import com.nutrifacil.service.ServicoNutricional;
+import com.nutrifacil.service.CalculadoraMetabolicas;
 
 import java.util.List;
 import java.util.Map;
 
-public class Principal {
+public class Aplicacao {
     public static void main(String[] args) {
         // Criando um usuário de exemplo
         Usuario usuario = new Usuario(
@@ -27,17 +27,17 @@ public class Principal {
         usuario.adicionarAlergia(Alergia.GLUTEN);
 
         // Inicializando os serviços
-        CalculadoraSaude calculadoraSaude = new CalculadoraSaude();
-        ServicoRecomendacaoAlimentos servicoAlimentos = new ServicoRecomendacaoAlimentos();
+        CalculadoraMetabolicas calculadoraMetabolicas = new CalculadoraMetabolicas();
+        ServicoNutricional servicoNutricional = new ServicoNutricional();
 
         // Calculando métricas de saúde
-        double tmb = calculadoraSaude.calcularTMB(usuario);
-        double imc = calculadoraSaude.calcularIMC(usuario);
-        String categoriaIMC = calculadoraSaude.getCategoriaIMC(imc);
-        double consumoAgua = calculadoraSaude.calcularConsumoAgua(usuario);
+        double tmb = calculadoraMetabolicas.calcularTMB(usuario);
+        double imc = calculadoraMetabolicas.calcularIMC(usuario);
+        String categoriaIMC = calculadoraMetabolicas.getCategoriaIMC(imc);
+        double consumoAgua = calculadoraMetabolicas.calcularConsumoAgua(usuario);
 
         // Obtendo recomendações alimentares
-        Map<String, List<String>> recomendacoesDieta = servicoAlimentos.getRecomendacoesDieta(usuario);
+        Map<String, List<String>> recomendacoesDieta = servicoNutricional.getRecomendacoesDieta(usuario);
 
         // Exibindo resultados
         System.out.println("=== NutriFácil - Relatório de Saúde ===");
@@ -76,15 +76,15 @@ public class Principal {
 
         System.out.println("\nMétricas de Saúde:");
         System.out.printf("Taxa Metabólica Basal (TMB): %.2f kcal/dia%n", 
-            calculadoraSaude.calcularTMB(usuario2));
+            calculadoraMetabolicas.calcularTMB(usuario2));
         System.out.printf("Índice de Massa Corporal (IMC): %.2f - %s%n", 
-            calculadoraSaude.calcularIMC(usuario2),
-            calculadoraSaude.getCategoriaIMC(calculadoraSaude.calcularIMC(usuario2)));
+            calculadoraMetabolicas.calcularIMC(usuario2),
+            calculadoraMetabolicas.getCategoriaIMC(calculadoraMetabolicas.calcularIMC(usuario2)));
         System.out.printf("Consumo Diário de Água Recomendado: %.0f ml%n", 
-            calculadoraSaude.calcularConsumoAgua(usuario2));
+            calculadoraMetabolicas.calcularConsumoAgua(usuario2));
 
         System.out.println("\nRecomendações Alimentares:");
-        Map<String, List<String>> recomendacoes2 = servicoAlimentos.getRecomendacoesDieta(usuario2);
+        Map<String, List<String>> recomendacoes2 = servicoNutricional.getRecomendacoesDieta(usuario2);
         System.out.println("\nAlimentos Recomendados:");
         recomendacoes2.get("Alimentos Recomendados").forEach(alimento -> 
             System.out.println("- " + alimento));
