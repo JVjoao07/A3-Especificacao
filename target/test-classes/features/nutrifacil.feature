@@ -82,7 +82,7 @@ Funcionalidade: Filtragem de Alimentos por Alergias
   Cenário: Usuário com múltiplas alergias
     Dado que o usuário tem alergia a "Lactose"
     E tem alergia a "Glúten"
-    E seleciona a dieta "Low Carb"
+    E seleciona a dieta "Baixo Carboidrato"
     Quando o sistema gera as recomendações
     Então a lista não deve incluir "Queijo"
     E não deve incluir "Pão"

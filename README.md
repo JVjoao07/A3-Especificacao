@@ -9,7 +9,7 @@ NutriFácil é um sistema Java que auxilia no cálculo de métricas de saúde e 
 - Cálculo de consumo diário de água recomendado
 - Recomendações alimentares baseadas em diferentes tipos de dieta:
   - Mediterrânea
-  - Low Carb
+  - Baixo Carboidrato
   - Cetogênica
   - Vegetariana
 - Filtragem de alimentos com base em alergias do usuário
@@ -29,7 +29,7 @@ NutriFácil é um sistema Java que auxilia no cálculo de métricas de saúde e 
    ```
 4. Execute o programa:
    ```bash
-   mvn exec:java -Dexec.mainClass="com.nutrifacil.Main"
+   mvn exec:java -Dexec.mainClass="com.nutrifacil.Aplicacao"
    ```
 
 ## Estrutura do Projeto
@@ -37,13 +37,13 @@ NutriFácil é um sistema Java que auxilia no cálculo de métricas de saúde e 
 ```
 src/main/java/com/nutrifacil/
 ├── model/
-│   ├── User.java
-│   ├── DietType.java
-│   └── Allergy.java
+│   ├── Usuario.java
+│   ├── TipoDieta.java
+│   └── Alergia.java
 ├── service/
-│   ├── HealthCalculator.java
-│   └── FoodRecommendationService.java
-└── Main.java
+│   ├── CalculadoraMetabolicas.java
+│   └── ServicoNutricional.java
+└── Aplicacao.java
 ```
 
 ## Exemplo de Uso
